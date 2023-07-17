@@ -41,14 +41,17 @@ class Program
                 //Creating collection provided with NewtonsoftJson
                 var data = JObject.Parse(responseBody);
                 //Showing the actual currencies ;)
-                Console.WriteLine("1 USD is equal to " + data["rates"]["EUR"] + " Euros");
-                Console.WriteLine("1 USD is equal to " + data["rates"]["PLN"] + " PLN");
+                //Console.WriteLine("1 USD is equal to " + data["rates"]["EUR"] + " Euros");
+                //Console.WriteLine("1 USD is equal to " + data["rates"]["PLN"] + " PLN");
+                //Console.WriteLine("1 USD is equal to " + data["rates"]["CHF"] + " CHF");
+            
                 using (StreamWriter st = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + @"Values.txt",append:true))
                 {
 
                     st.WriteLine("1 USD is equal to " + data["rates"]["EUR"] + " Euros " + DateTime.Now.ToString());
                     st.WriteLine("1 USD is equal to " + data["rates"]["PLN"] + " PLN " + DateTime.Now.ToString());
-                }
+                    st.WriteLine("1 USD is equal to " + data["rates"]["CHF"] + " CHF " + DateTime.Now.ToString());
+            }
 
                 //After saving data 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Ustawienie kontekstu licencji
@@ -81,6 +84,9 @@ class Program
                 worksheet.Cells[row, 5].Value = "1 USD is equal to:";
                 worksheet.Cells[row, 6].Value = data["rates"]["PLN"].ToObject<double>();
                 worksheet.Cells[row, 7].Value = "PLN";
+                worksheet.Cells[row, 8].Value = "1 USD is equal to:";
+                worksheet.Cells[row, 9].Value = data["rates"]["GBP"].ToObject<double>();
+                worksheet.Cells[row, 10].Value = "GBP";
 
 
                 // Szukamy wykresu o nazwie "Wykres"
@@ -104,6 +110,8 @@ class Program
                 series.Header = "USD to EUR";
                 var series2 = chart.Series.Add(worksheet.Cells[1, 6, worksheet.Dimension.End.Row, 6], worksheet.Cells[1, 4, worksheet.Dimension.End.Row, 4]);
                 series2.Header = "USD to PLN";
+                var series3 = chart.Series.Add(worksheet.Cells[1, 9, worksheet.Dimension.End.Row, 9], worksheet.Cells[1, 4, worksheet.Dimension.End.Row, 4]);
+                series3.Header = "USD to GBP";
                 // Ustawiamy pozycję i rozmiar wykresu
                 chart.SetPosition(6, 0, 3, 0);
                 chart.SetSize(800, 600);
